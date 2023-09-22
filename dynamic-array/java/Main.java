@@ -9,10 +9,16 @@ public class Main {
         }
         System.out.println("");
 
-        list.set(0, 111);
 
-        list.set(2, 111);
-        list.set(4, 111);
+        list.insertAt(0, 444);
+
+        for (int e : list.see()) {
+            System.out.print(e);
+            System.out.print(" ");
+        }
+        System.out.println("");
+
+        list.insertAt(7, 444);
 
         for (int e : list.see()) {
             System.out.print(e);
