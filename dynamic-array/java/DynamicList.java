@@ -40,20 +40,10 @@ public class DynamicList {
         this.array[i] = x;
     }
 
-    // add x as the last item
-    public void insertLast(int x) {
-        if (this.array.length == this.length) {
-            this.reallocate();
-        }
-
-        this.array[this.length] = x;
-        this.length++;
-    }
-
     // add x as the ith item
     public void insertAt(int i, int x) throws IndexOutOfBoundsException {
         if (i > this.length) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException(i);
         }
 
         int[] old = this.array.clone();
@@ -66,9 +56,8 @@ public class DynamicList {
 
         boolean before = true;
 
-        for (int index = 0; index < this.length+1; index++) {
+        for (int index = 0; index < this.length + 1; index++) {
             if (index == i) {
-                System.out.println(x);
                 this.array[i] = x;
                 before = false;
                 continue;
@@ -77,29 +66,108 @@ public class DynamicList {
             if (before) {
                 this.array[index] = old[index];
             } else {
-                System.out.printf("index: %d\n", index);
-                this.array[index] = old[index-1];
+                this.array[index] = old[index - 1];
             }
         }
 
         this.length++;
-        
     }
 
     // remove and return the ith item
-    // deleteAt(int i)
+    public int deleteAt(int i) throws IndexOutOfBoundsException {
+        if (i >= array.length) {
+            throw new IndexOutOfBoundsException(i);
+        }
 
+        int[] old = this.array.clone();
+
+        this.array = new int[old.length - 1];
+
+        boolean before = true;
+
+        for (int index = 0; index < old.length; index++) {
+            if (index == i) {
+                System.out.println(i);
+                before = false;
+                continue;
+            }
+
+            if (before) {
+                this.array[index] = old[index];
+            } else {
+                this.array[index - 1] = old[index];
+            }
+        }
+
+        this.length--;
+        
+        return old[i];
+    }
+    
     // add x as the first item
-    // insertFirst(int x)
+    public void insertFirst(int x) throws IndexOutOfBoundsException {
+        int[] old = this.array.clone();
+
+        if (this.array.length == this.length) {
+            this.reallocate(); // TODO: may be it will be better to reallocate differently here
+        }
+
+        this.array[0] = x;
+
+        for (int index = 1; index < this.length + 1; index++) {
+            this.array[index] = old[index - 1];
+        }
+
+        this.length++;
+    }
 
     // remove and return the first item
-    // deleteFirst()
+    public int deleteFirst() throws IndexOutOfBoundsException {
+        if (this.length == 0) {
+            throw new IndexOutOfBoundsException(0);
+        }
+
+        int[] old = this.array.clone();
+
+        if (this.array.length == this.length) {
+            this.reallocate(); // TODO: may be it will be better to reallocate differently here
+        }
+
+        // do not reallocate here, but refill this.array
+
+        for (int index = 1; index < old.length; index++) {
+            this.array[index - 1] = old[index];
+        }
+
+        this.length--;
+
+        return old[0];
+    }
 
     // add x as the last item
-    // insertLast(int x)
+    public void insertLast(int x) {
+        if (this.array.length == this.length) {
+            this.reallocate();
+        }
+
+        this.array[this.length] = x;
+        this.length++;
+    }
 
     // remove and return the last item
-    // deleteLast()
+    public int deleteLast() throws IndexOutOfBoundsException {
+        if (this.length == 0) {
+            throw new IndexOutOfBoundsException(0);
+        }
+
+        int last = this.array[this.length - 1];
+
+        this.array[this.length - 1] = 0;
+        this.length--;
+
+        return last;
+    }
+    
 
     private void reallocate() {
         int[] old = array;

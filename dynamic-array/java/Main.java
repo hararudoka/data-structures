@@ -9,16 +9,7 @@ public class Main {
         }
         System.out.println("");
 
-
-        list.insertAt(0, 444);
-
-        for (int e : list.see()) {
-            System.out.print(e);
-            System.out.print(" ");
-        }
-        System.out.println("");
-
-        list.insertAt(7, 444);
+        list.insertLast(0);
 
         for (int e : list.see()) {
             System.out.print(e);
