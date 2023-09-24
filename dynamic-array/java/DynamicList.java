@@ -44,9 +44,10 @@ public class DynamicList<T> implements Iterable<T> {
         return this.length;
     }
 
+    @SuppressWarnings("unchecked")
     // return the ith item
-    public Object getAt(int i) throws IndexOutOfBoundsException {
-        return this.array[i];
+    public T getAt(int i) throws IndexOutOfBoundsException {
+        return (T) this.array[i];
     }
 
     // replace the ith item with x
@@ -87,8 +88,9 @@ public class DynamicList<T> implements Iterable<T> {
         this.length++;
     }
 
+    @SuppressWarnings("unchecked")
     // remove and return the ith item
-    public Object deleteAt(int i) throws IndexOutOfBoundsException {
+    public T deleteAt(int i) throws IndexOutOfBoundsException {
         if (i >= array.length) {
             throw new IndexOutOfBoundsException(i);
         }
@@ -114,10 +116,10 @@ public class DynamicList<T> implements Iterable<T> {
         }
 
         this.length--;
-        
-        return old[i];
+
+        return (T) old[i];
     }
-    
+
     // add x as the first item
     public void insertFirst(T x) throws IndexOutOfBoundsException {
         Object[] old = this.array.clone();
@@ -135,8 +137,9 @@ public class DynamicList<T> implements Iterable<T> {
         this.length++;
     }
 
+    @SuppressWarnings("unchecked")
     // remove and return the first item
-    public Object deleteFirst() throws IndexOutOfBoundsException {
+    public T deleteFirst() throws IndexOutOfBoundsException {
         if (this.length == 0) {
             throw new IndexOutOfBoundsException(0);
         }
@@ -155,11 +158,11 @@ public class DynamicList<T> implements Iterable<T> {
 
         this.length--;
 
-        return old[0];
+        return (T) old[0];
     }
 
     // add x as the last item
-    public void insertLast(Object x) {
+    public void insertLast(T x) {
         if (this.array.length == this.length) {
             this.reallocate();
         }
@@ -168,8 +171,9 @@ public class DynamicList<T> implements Iterable<T> {
         this.length++;
     }
 
+    @SuppressWarnings("unchecked")
     // remove and return the last item
-    public Object deleteLast() throws IndexOutOfBoundsException {
+    public T deleteLast() throws IndexOutOfBoundsException {
         if (this.length == 0) {
             throw new IndexOutOfBoundsException(0);
         }
@@ -179,7 +183,7 @@ public class DynamicList<T> implements Iterable<T> {
         this.array[this.length - 1] = null;
         this.length--;
 
-        return last;
+        return (T) last;
     }
 
     private void reallocate() {
