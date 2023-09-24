@@ -1,26 +1,40 @@
-public class DynamicList {
-    private int[] array;
-    private int length = 0;
+import java.util.Iterator;
 
-    // see returns a smaller copy of arr to ensure that a user will not change
-    // original array
-    public int[] see() {
-        int[] toSee = new int[this.length];
+public class DynamicList<T> implements Iterable<T> {
+    @Override
+    public Iterator<T> iterator() {
+        return new DynamicListIterator();
+    }
 
-        for (int index = 0; index < toSee.length; index++) {
-            toSee[index] = this.array[index];
+    // Inner class for the iterator
+    private class DynamicListIterator implements Iterator<T> {
+        private int currentIndex = 0;
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex < length;
         }
 
-        return toSee;
+        @Override
+        @SuppressWarnings("unchecked")
+        public T next() {
+            if (hasNext()) {
+                return (T) array[currentIndex++];
+            }
+            throw new java.util.NoSuchElementException();
+        }
     }
+
+    private Object[] array;
+    private int length = 0;
 
     // DynamicList is a constructor. Equivalent of build(X)
     public DynamicList() {
-        this.array = new int[1];
-        this.length = this.array.length;
+        this.array = (Object[]) new Object[0];
+        this.length = 0;
     }
 
-    public DynamicList(int[] arr) {
+    public DynamicList(Object[] arr) {
         this.array = arr.clone(); // clone to ensure new values in this.array
         this.length = this.array.length;
     }
@@ -31,22 +45,22 @@ public class DynamicList {
     }
 
     // return the ith item
-    public int getAt(int i) throws IndexOutOfBoundsException {
+    public Object getAt(int i) throws IndexOutOfBoundsException {
         return this.array[i];
     }
 
     // replace the ith item with x
-    public void setAt(int i, int x) throws IndexOutOfBoundsException {
+    public void setAt(int i, T x) throws IndexOutOfBoundsException {
         this.array[i] = x;
     }
 
     // add x as the ith item
-    public void insertAt(int i, int x) throws IndexOutOfBoundsException {
+    public void insertAt(int i, T x) throws IndexOutOfBoundsException {
         if (i > this.length) {
             throw new IndexOutOfBoundsException(i);
         }
 
-        int[] old = this.array.clone();
+        Object[] old = this.array.clone();
 
         if (this.array.length == this.length) {
             this.reallocate(); // TODO: may be it will be better to reallocate differently here
@@ -74,14 +88,14 @@ public class DynamicList {
     }
 
     // remove and return the ith item
-    public int deleteAt(int i) throws IndexOutOfBoundsException {
+    public Object deleteAt(int i) throws IndexOutOfBoundsException {
         if (i >= array.length) {
             throw new IndexOutOfBoundsException(i);
         }
 
-        int[] old = this.array.clone();
+        Object[] old = this.array.clone();
 
-        this.array = new int[old.length - 1];
+        this.array = new Object[old.length - 1];
 
         boolean before = true;
 
@@ -105,8 +119,8 @@ public class DynamicList {
     }
     
     // add x as the first item
-    public void insertFirst(int x) throws IndexOutOfBoundsException {
-        int[] old = this.array.clone();
+    public void insertFirst(T x) throws IndexOutOfBoundsException {
+        Object[] old = this.array.clone();
 
         if (this.array.length == this.length) {
             this.reallocate(); // TODO: may be it will be better to reallocate differently here
@@ -122,12 +136,12 @@ public class DynamicList {
     }
 
     // remove and return the first item
-    public int deleteFirst() throws IndexOutOfBoundsException {
+    public Object deleteFirst() throws IndexOutOfBoundsException {
         if (this.length == 0) {
             throw new IndexOutOfBoundsException(0);
         }
 
-        int[] old = this.array.clone();
+        Object[] old = this.array.clone();
 
         if (this.array.length == this.length) {
             this.reallocate(); // TODO: may be it will be better to reallocate differently here
@@ -145,7 +159,7 @@ public class DynamicList {
     }
 
     // add x as the last item
-    public void insertLast(int x) {
+    public void insertLast(Object x) {
         if (this.array.length == this.length) {
             this.reallocate();
         }
@@ -155,32 +169,33 @@ public class DynamicList {
     }
 
     // remove and return the last item
-    public int deleteLast() throws IndexOutOfBoundsException {
+    public Object deleteLast() throws IndexOutOfBoundsException {
         if (this.length == 0) {
             throw new IndexOutOfBoundsException(0);
         }
 
-        int last = this.array[this.length - 1];
+        Object last = this.array[this.length - 1];
 
-        this.array[this.length - 1] = 0;
+        this.array[this.length - 1] = null;
         this.length--;
 
         return last;
     }
-    
 
     private void reallocate() {
-        int[] old = array;
+        Object[] old = array;
 
         double k;
 
         if (this.array.length > 1024) {
             k = this.array.length * 1.25; // ensure more slow growing after 1024 values
+        } else if (this.array.length == 0) {
+            k = 1;
         } else {
             k = this.array.length * 2;
         }
 
-        this.array = new int[((int) k)];
+        this.array = new Object[(int) k];
 
         for (int index = 0; index < old.length; index++) {
             this.array[index] = old[index];

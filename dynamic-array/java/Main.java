@@ -1,17 +1,17 @@
 public class Main {
     public static void main(String[] args) {
-        int[] array = {5, 4, 3, 2, 1};
-        DynamicList list = new DynamicList(array);
+        Integer[] ints = {1, 2, 3, 4, 5};
+        DynamicList<Integer> list = new DynamicList<>(ints);
 
-        for (int e : list.see()) {
+        for (Integer e : list) {
             System.out.print(e);
             System.out.print(" ");
         }
         System.out.println("");
 
-        list.insertLast(0);
+        list.setAt(2, 100);
 
-        for (int e : list.see()) {
+        for (Integer e : list) {
             System.out.print(e);
             System.out.print(" ");
         }
